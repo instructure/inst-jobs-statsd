@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+
+  app:
+    build: .
+    environment:
+      INST_STATSD_HOST: graphite
+      INST_STATSD_PORT: "8125"
+      INST_STATSD_NAMESPACE: inst-jobs-statsd
+      INST_STATSD_APPEND_HOSTNAME: "false"
+      RAILS_ENV: test
+      TEST_DB_HOST: postgres
+      TEST_DB_USERNAME: postgres
+      TEST_REDIS_CONNECTION: redis://redis:6379/
+      TEST_ENV_NUMBER: "1"
+    links:
+      - postgres
+      - redis
+      - graphite
+    volumes:
+      - gems:/home/docker/.rvm/gems
+
+  postgres:
+    image: postgres:9.3
+
+  redis:
+    image: redis:2.6
+
+  graphite:
+    image: hopsoft/graphite-statsd
+
+volumes:
+  gems: {}
