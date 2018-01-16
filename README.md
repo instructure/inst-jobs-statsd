@@ -30,8 +30,8 @@ Implements the following stats:
 
 - other
   - `delayedjob.pop`: time for each :pop callback (timing)
-  - `delayedjob.workqueuepop`: time for eacho :work_queue_pop callback (timing)
-  - `delayedjob.orphaned`: count of jobs that appear to have been orphaned
+  - `delayedjob.workqueuepop`: time for each :work_queue_pop callback (timing)
+  - `delayedjob.orphaned`: counter of jobs that appear to have been orphaned
 
 ### Tagged stats
 
@@ -98,7 +98,7 @@ Individual spec runs can be started like so:
 
 ```bash
 docker-compose run --rm app /bin/bash -l -c \
-  "BUNDLE_GEMFILE=spec/gemfiles/rails-5.0.gemfile rvm-exec 2.4 bundle exec rspec"
+  "BUNDLE_GEMFILE=spec/gemfiles/50.gemfile rvm-exec 2.4 bundle exec rspec"
 ```
 
 If you'd like to mount your git checkout within the docker container running
