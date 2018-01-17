@@ -12,7 +12,8 @@ module InstJobsStatsd
       names = ["#{basename}.#{stat_name}"]
       tagged = tagged_stat(names[0], job)
       names << tagged if tagged.present?
-      names
+      names << region_tags(names)
+      names.flatten.compact
     end
 
     # Given a stat name, add a suffix to it to make it
@@ -44,6 +45,16 @@ module InstJobsStatsd
       tags << method_tag if method_tag.present?
 
       tags
+    end
+
+    # We are using all existing stat names here because we do not want
+    # to break existing dependencies on the non-regioned data
+    def self.region_tags(stat_names)
+      return unless ENV['INST_JOBS_STATSD_NAMESPACE']
+
+      split_names = stat_names.map{ |names| names.split('.') }
+      split_names.map{ |split_names| split_names.insert(2, ENV['INST_JOBS_STATSD_NAMESPACE']) }
+      split_names.map{ |regioned_names| regioned_names.join('.') }
     end
   end
 end

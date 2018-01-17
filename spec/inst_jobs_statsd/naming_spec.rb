@@ -22,5 +22,23 @@ RSpec.describe InstJobsStatsd::Naming do
         it { should eq ['delayedjob.wut'] }
       end
     end
+
+    context 'with region tags' do
+      before do
+        @jobs_namespace = ENV['INST_JOBS_STATSD_NAMESPACE']
+        ENV['INST_JOBS_STATSD_NAMESPACE'] = 'region_name'
+      end
+
+      after do
+        ENV['INST_JOBS_STATSD_NAMESPACE'] = @jobs_namespace
+      end
+
+      let(:job) { build :job, tag: 'a_tag_name' }
+
+      it { should include 'delayedjob.wut' }
+      it { should include 'delayedjob.wut.tag.a_tag_name' }
+      it { should include 'delayedjob.wut.region_name' }
+      it { should include 'delayedjob.wut.region_name.tag.a_tag_name' }
+    end
   end
 end

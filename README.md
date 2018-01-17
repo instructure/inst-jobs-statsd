@@ -40,6 +40,10 @@ to create a tagged version of the stat. So, for a job with the tag `BatchProcess
 the `delayedjob.perform` stat would also generate `delayedjob.perform.tag.BatchProcessing.run`,
 allowing stats to be tracked for unique job types.
 
+An ENV variable, `INST_JOBS_STATSD_NAMESPACE`, can be defined to further segregate data
+if necessary (for example, by region). Adding this namespace will maintain existing stats and
+also create new namespaced stats
+  - For an ENV var defined as `iad-prod`: `delayedjob.perform` would also generate `delayedjob.perform.iad-prod`
 
 ## Installation
 
