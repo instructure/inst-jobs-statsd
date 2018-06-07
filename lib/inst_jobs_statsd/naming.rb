@@ -52,9 +52,12 @@ module InstJobsStatsd
     def self.region_tags(stat_names)
       return unless ENV['INST_JOBS_STATSD_NAMESPACE']
 
-      split_names = stat_names.map{ |names| names.split('.') }
-      split_names.map{ |split_names| split_names.insert(2, ENV['INST_JOBS_STATSD_NAMESPACE']) }
-      split_names.map{ |regioned_names| regioned_names.join('.') }
+      stat_names.map do |name|
+        name
+          .split('.')
+          .insert(2, ENV['INST_JOBS_STATSD_NAMESPACE'])
+          .join('.')
+      end
     end
   end
 end
