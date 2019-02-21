@@ -30,6 +30,17 @@ module InstJobsStatsd
       tagged
     end
 
+    def self.dd_job_tags(job)
+      return {} unless job
+      return {} unless job.tag
+      return {} if job.tag =~ /Class:0x/
+
+      method_tag, obj_tag = split_to_tag(job)
+      tag = obj_tag
+      tag = [obj_tag, method_tag].join('.') if method_tag.present?
+      {tag: tag}
+    end
+
     # this converts Foo#bar" or "Foo.bar" into "Foo and "bar",
     # and makes sure the values are valid to be used for statsd names
     def self.job_tags(job)
@@ -37,13 +48,9 @@ module InstJobsStatsd
       return unless job.tag
       return if job.tag =~ /Class:0x/
 
-      obj_tag, method_tag = job.tag.split(/[\.#]/, 2).map do |v|
-        InstStatsd::Statsd.escape(v).gsub('::', '-')
-      end
-
+      method_tag, obj_tag = split_to_tag(job)
       tags = [obj_tag]
       tags << method_tag if method_tag.present?
-
       tags
     end
 
@@ -58,6 +65,15 @@ module InstJobsStatsd
           .insert(2, ENV['INST_JOBS_STATSD_NAMESPACE'])
           .join('.')
       end
+    end
+
+    private
+
+    def self.split_to_tag(job)
+      obj_tag, method_tag = job.tag.split(/[\.#]/, 2).map do |v|
+        InstStatsd::Statsd.escape(v).gsub('::', '-')
+      end
+      return method_tag, obj_tag
     end
   end
 end

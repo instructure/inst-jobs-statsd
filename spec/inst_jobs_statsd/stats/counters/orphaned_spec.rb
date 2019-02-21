@@ -20,7 +20,7 @@ RSpec.describe InstJobsStatsd::Stats::Counters::Orphaned do
 
     it do
       expect(InstStatsd::Statsd).to receive(:count)
-        .with(array_including(/\.orphaned$/), 2, 1)
+        .with(array_including(/\.orphaned$/), 2, 1, { tags: {} })
       Delayed::Worker.lifecycle.run_callbacks(:perform, nil, Delayed::Job.first) {}
     end
   end

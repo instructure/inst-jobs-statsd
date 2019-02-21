@@ -5,9 +5,9 @@ module InstJobsStatsd
         stats = Naming.qualified_names(stat, job)
 
         if block_given?
-          InstStatsd::Statsd.time(stats, sample_rate) { yield }
+          InstStatsd::Statsd.time(stats, sample_rate, short_stat: stat, tags: Naming.dd_job_tags(job)) { yield }
         else
-          InstStatsd::Statsd.timing(stats, timing, sample_rate)
+          InstStatsd::Statsd.timing(stats, timing, sample_rate, tags: Naming.dd_job_tags(job))
         end
       end
 
