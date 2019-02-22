@@ -12,7 +12,7 @@ module InstJobsStatsd
 
       def self.report_gauge(stat, value, job: nil, sample_rate: 1)
         stats = Naming.qualified_names(stat, job)
-        InstStatsd::Statsd.gauge(stats, value, sample_rate, tags: Naming.dd_job_tags(job))
+        InstStatsd::Statsd.gauge(stats, value, sample_rate, short_stat: stat, tags: Naming.dd_job_tags(job))
       end
 
       class Callbacks

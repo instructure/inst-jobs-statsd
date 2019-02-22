@@ -24,7 +24,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .with(array_including(/\.failed_depth$/), 1, 1, { tags: {} })
+        .with(array_including(/\.failed_depth$/), 1, 1, { short_stat: anything, tags: {} })
       InstJobsStatsd::Stats::Periodic::Failed.report_failed_depth
     end
   end

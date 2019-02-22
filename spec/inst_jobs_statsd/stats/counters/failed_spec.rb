@@ -10,7 +10,7 @@ RSpec.describe InstJobsStatsd::Stats::Counters::Failed do
     let(:x) { Struct.new(:perform).new(true) }
     it do
       expect(InstStatsd::Statsd).to receive(:count)
-        .with(array_including(/\.failed$/), 1, 1, { tags: {} })
+        .with(array_including(/\.failed$/), 1, 1, { short_stat: :failed, tags: {} })
 
       InstJobsStatsd::Stats::Counters::Failed.enable_failed_count
       x.send_later(:perform)
