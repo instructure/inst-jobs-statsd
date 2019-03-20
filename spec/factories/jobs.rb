@@ -1,6 +1,6 @@
 FactoryGirl.define do
   class JobFixture
-    attr_accessor :tag, :run_at
+    attr_accessor :tag, :run_at, :strand
   end
 
   factory :job_fixture, aliases: [:job] do
