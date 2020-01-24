@@ -1,4 +1,4 @@
-version: '2'
+version: '3.4'
 
 services:
 
@@ -9,10 +9,12 @@ services:
       # your host filesystem mount named above. You might want to use the rest
       # of these unless you're using dinghy on OSX (usually needed for linux).
       - coverage:/app/coverage
+      - gems:/home/docker/.rvm/gems
       - log:/app/log
       - bundle-config:/app/spec/gemfiles/.bundle
 
 volumes:
   coverage: {}
+  gems: {}
   log: {}
   bundle-config: {}

@@ -1,4 +1,4 @@
-version: '2'
+version: '3.4'
 
 services:
 
@@ -18,17 +18,12 @@ services:
       - postgres
       - redis
       - graphite
-    volumes:
-      - gems:/home/docker/.rvm/gems
 
   postgres:
-    image: postgres:9.3
+    image: postgres:9.6
 
   redis:
     image: redis:2.6
 
   graphite:
     image: hopsoft/graphite-statsd
-
-volumes:
-  gems: {}

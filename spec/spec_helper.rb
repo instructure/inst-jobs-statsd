@@ -1,4 +1,4 @@
-if /^2\.4/ =~ RUBY_VERSION && /50\./ =~ ENV['BUNDLE_GEMFILE'] # Limit coverage to one build
+if /^2\.5/ =~ RUBY_VERSION && /51\./ =~ ENV['BUNDLE_GEMFILE'] # Limit coverage to one build
   require 'simplecov'
 
   SimpleCov.start do
@@ -6,8 +6,6 @@ if /^2\.4/ =~ RUBY_VERSION && /50\./ =~ ENV['BUNDLE_GEMFILE'] # Limit coverage t
     add_filter 'spec'
     track_files 'lib/**/*.rb'
   end
-
-  SimpleCov.minimum_coverage(100)
 end
 
 require 'inst-jobs-statsd'

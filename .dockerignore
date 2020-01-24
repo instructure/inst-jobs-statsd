@@ -1,0 +1,9 @@
+/.gitignore
+/.ruby-version
+/coverage
+/docker-compose*
+/Dockerfile
+/Gemfile.lock
+/Jenkinsfile
+/spec/gems/*.gemfile.lock
+/**/*.gem

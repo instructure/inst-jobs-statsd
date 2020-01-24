@@ -98,7 +98,7 @@ Individual spec runs can be started like so:
 
 ```bash
 docker-compose run --rm app /bin/bash -l -c \
-  "BUNDLE_GEMFILE=spec/gemfiles/50.gemfile rvm-exec 2.4 bundle exec rspec"
+  "BUNDLE_GEMFILE=spec/gemfiles/51.gemfile rvm-exec 2.5 bundle exec rspec"
 ```
 
 If you'd like to mount your git checkout within the docker container running
