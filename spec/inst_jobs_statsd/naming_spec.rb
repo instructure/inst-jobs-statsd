@@ -40,5 +40,17 @@ RSpec.describe InstJobsStatsd::Naming do
       it { should include 'delayedjob.wut.region_name' }
       it { should include 'delayedjob.wut.region_name.tag.a_tag_name' }
     end
+
+    describe '.dd_job_tags' do
+      it 'works' do
+        job = double(tag: 'Account.run_reports_later', shard: double(id: 101), strand: 'special')
+        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq({ tag: 'Account.run_reports_later', jobshard: 101})
+      end
+
+      it 'properly munges job tags' do
+        job = double(tag: 'Quizzes::Quiz#do_something', strand: nil)
+        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq({ tag: 'Quizzes-Quiz.do_something'})
+      end
+    end
   end
 end

@@ -45,6 +45,7 @@ module InstJobsStatsd
       tag = obj_tag
       tag = [obj_tag, method_tag].join('.') if method_tag.present?
       tags[:tag] = tag
+      tags
     end
 
     def self.custom_tags(job, tags)
