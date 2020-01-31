@@ -35,7 +35,15 @@ ActiveRecord::Base.establish_connection(connection_config)
 
 # Apply the migrations from the inst-jobs gem
 inst_jobs_spec = Gem::Specification.find_by_name('inst-jobs')
-ActiveRecord::Migrator.migrate(inst_jobs_spec.gem_dir + '/db/migrate')
-ActiveRecord::Migrator.migrate(inst_jobs_spec.gem_dir + '/spec/migrate')
+if ::Rails.version >= '6'
+  sm = ActiveRecord::Base.connection.schema_migration
+  migrations = ActiveRecord::MigrationContext.new(inst_jobs_spec.gem_dir + '/db/migrate', sm).migrations
+  ActiveRecord::Migrator.new(:up, migrations, sm).migrate
+  migrations = ActiveRecord::MigrationContext.new(inst_jobs_spec.gem_dir + '/spec/migrate', sm).migrations
+  ActiveRecord::Migrator.new(:up, migrations, sm).migrate
+else
+  ActiveRecord::Migrator.migrate(inst_jobs_spec.gem_dir + '/db/migrate')
+  ActiveRecord::Migrator.migrate(inst_jobs_spec.gem_dir + '/spec/migrate')
+end
 Delayed::Backend::ActiveRecord::Job.reset_column_information
 Delayed::Backend::ActiveRecord::Job::Failed.reset_column_information
