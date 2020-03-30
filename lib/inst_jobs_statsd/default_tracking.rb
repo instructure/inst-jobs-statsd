@@ -7,8 +7,8 @@ module InstJobsStatsd
     end
 
     module ClassMethods
-      def track_jobs
-        @jobs_tracker ||= JobsTracker.new
+      def track_jobs(enable_periodic_queries: true)
+        @jobs_tracker ||= JobsTracker.new(enable_periodic_queries: enable_periodic_queries)
       end
     end
   end

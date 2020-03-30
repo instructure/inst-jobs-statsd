@@ -1,21 +1,23 @@
 module InstJobsStatsd
   class JobsTracker
-    def self.track
-      @current_tracking = new
+    def self.track(enable_periodic_queries: true)
+      @current_tracking = new(enable_periodic_queries: enable_periodic_queries)
       yield
       tracking = @current_tracking
       @current_tracking = nil
       tracking
     end
 
-    def initialize
+    def initialize(enable_periodic_queries: true)
       Stats::Counters::Failed.enable
       Stats::Counters::Orphaned.enable
       Stats::Counters::Run.enable
 
-      Stats::Periodic::Failed.enable
-      Stats::Periodic::Queue.enable
-      Stats::Periodic::Run.enable
+      if enable_periodic_queries
+        Stats::Periodic::Failed.enable
+        Stats::Periodic::Queue.enable
+        Stats::Periodic::Run.enable
+      end
 
       Stats::Timing::Failed.enable
       Stats::Timing::Perform.enable
