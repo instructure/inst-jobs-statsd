@@ -1,7 +1,6 @@
-version: '3.4'
+version: '2'
 
 services:
-
   app:
     build: .
     environment:
@@ -21,6 +20,8 @@ services:
 
   postgres:
     image: postgres:9.6
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
 
   redis:
     image: redis:2.6
