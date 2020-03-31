@@ -6,7 +6,6 @@ rvm:
   - 2.5
 
 gemfile:
-  - spec/gemfiles/42.gemfile
   - spec/gemfiles/51.gemfile
   - spec/gemfiles/60.gemfile
 
