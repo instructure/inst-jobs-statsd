@@ -10,7 +10,6 @@ require_relative 'inst_jobs_statsd/naming'
 
 require_relative 'inst_jobs_statsd/stats/counters'
 require_relative 'inst_jobs_statsd/stats/counters/failed'
-require_relative 'inst_jobs_statsd/stats/counters/orphaned'
 require_relative 'inst_jobs_statsd/stats/counters/run'
 
 require_relative 'inst_jobs_statsd/stats/periodic'

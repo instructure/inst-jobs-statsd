@@ -10,7 +10,6 @@ module InstJobsStatsd
 
     def initialize(enable_periodic_queries: true)
       Stats::Counters::Failed.enable
-      Stats::Counters::Orphaned.enable
       Stats::Counters::Run.enable
 
       if enable_periodic_queries

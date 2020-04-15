@@ -31,7 +31,6 @@ Implements the following stats:
 - other
   - `delayedjob.pop`: time for each :pop callback (timing)
   - `delayedjob.workqueuepop`: time for each :work_queue_pop callback (timing)
-  - `delayedjob.orphaned`: counter of jobs that appear to have been orphaned
 
 ### Tagged stats
 
