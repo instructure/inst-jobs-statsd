@@ -18,12 +18,12 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
     before do
       InstJobsStatsd::Stats::Periodic::Queue.enable_queue_depth
 
-      x.send_later(:perform)
+      x.delay.perform
       Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: 'test')
 
-      x.send_later(:perform)
-      x.send_later_enqueue_args(:perform, run_at: now + 1.minute)
-      x.send_later_enqueue_args(:perform, run_at: now + 10.minutes)
+      x.delay.perform
+      x.delay(run_at: now + 1.minute).perform
+      x.delay(run_at: now + 10.minutes).perform
     end
 
     it do
@@ -56,12 +56,12 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
     before do
       InstJobsStatsd::Stats::Periodic::Queue.enable_queue_age
 
-      x.send_later(:perform)
+      x.delay.perform
       Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: 'test')
 
-      x.send_later(:perform)
-      x.send_later_enqueue_args(:perform, run_at: now + 1.minute)
-      x.send_later_enqueue_args(:perform, run_at: now + 10.minutes)
+      x.delay.perform
+      x.delay(run_at: now + 1.minute).perform
+      x.delay(run_at: now + 10.minutes).perform
     end
 
     it do

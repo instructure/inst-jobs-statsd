@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.4'
 
-  s.add_dependency 'inst-jobs', '>= 0.15', '< 0.17'
+  s.add_dependency 'inst-jobs', '~> 1.0'
   s.add_dependency 'inst_statsd', '>= 2.1.2', '< 3.0'
 
   s.add_development_dependency 'bump'

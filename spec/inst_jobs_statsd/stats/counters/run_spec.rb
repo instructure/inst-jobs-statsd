@@ -13,7 +13,7 @@ RSpec.describe InstJobsStatsd::Stats::Counters::Run do
       Delayed::Worker.lifecycle.reset!
       InstJobsStatsd::Stats::Counters::Run.enable
 
-      2.times { x.send_later(:perform) }
+      2.times { x.delay.perform }
     end
 
     it do

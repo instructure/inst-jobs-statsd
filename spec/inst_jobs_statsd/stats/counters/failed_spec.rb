@@ -13,7 +13,7 @@ RSpec.describe InstJobsStatsd::Stats::Counters::Failed do
         .with(array_including(/\.failed$/), 1, 1, { short_stat: :failed, tags: {} })
 
       InstJobsStatsd::Stats::Counters::Failed.enable_failed_count
-      x.send_later(:perform)
+      x.delay.perform
       Delayed::Job.first.fail!
     end
   end

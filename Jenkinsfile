@@ -22,7 +22,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Re-enable Rubocop after upgrading and resolving offenses.
-                // sh 'docker-compose run --rm test /bin/bash -lc "rvm-exec 2.5 bundle exec rubocop --fail-level autocorrect"'
+                // sh 'docker-compose run --rm test /bin/bash -lc "rvm-exec 2.6 bundle exec rubocop --fail-level autocorrect"'
                 sh 'docker-compose run --name coverage app'
             }
 

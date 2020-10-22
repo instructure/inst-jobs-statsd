@@ -18,7 +18,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
       InstJobsStatsd::Stats::Periodic.enable_callbacks
       InstJobsStatsd::Stats::Periodic::Failed.enable_failed_depth
 
-      x.send_later(:perform)
+      x.delay.perform
       Delayed::Job.first.fail!
     end
 

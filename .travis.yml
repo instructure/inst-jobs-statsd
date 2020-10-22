@@ -2,8 +2,8 @@ language: ruby
 cache: bundler
 
 rvm:
-  - 2.4
-  - 2.5
+  - 2.6
+  - 2.7
 
 gemfile:
   - spec/gemfiles/51.gemfile
@@ -14,11 +14,6 @@ addons:
 
 services:
   - redis-server
-
-matrix:
-  exclude:
-    - rvm: 2.4
-      gemfile: spec/gemfiles/60.gemfile
 
 before_install: gem update bundler
 bundler_args: --jobs 3

@@ -14,10 +14,10 @@ RUN mkdir -p /app/coverage \
              /app/spec/dummy/log \
              /app/spec/dummy/tmp
 
-RUN /bin/bash -lc "cd /app && rvm-exec 2.4 bundle install --jobs 5"
-RUN /bin/bash -lc "cd /app && rvm-exec 2.5 bundle install --jobs 5"
+RUN /bin/bash -lc "cd /app && rvm-exec 2.6 gem install bundler -v 2.1.4 && rvm-exec 2.6 bundle install --jobs 5"
+RUN /bin/bash -lc "cd /app && rvm-exec 2.7 bundle install --jobs 5"
 COPY --chown=docker:docker . /app
 
 ENV TEST_DB_USERNAME postgres
 
-CMD /bin/bash -l -c "rvm-exec 2.5 bundle exec wwtd --parallel"
+CMD /bin/bash -l -c "rvm-exec 2.6 bundle exec wwtd --parallel"
