@@ -12,7 +12,6 @@ RSpec.describe InstJobsStatsd::JobsTracker do
 
   describe '.initialize' do
     it 'enables everything' do
-      expect(InstJobsStatsd::Stats::Counters::Failed).to receive(:enable)
       expect(InstJobsStatsd::Stats::Counters::Run).to receive(:enable)
 
       expect(InstJobsStatsd::Stats::Periodic::Failed).to receive(:enable)

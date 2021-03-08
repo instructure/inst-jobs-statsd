@@ -44,12 +44,12 @@ RSpec.describe InstJobsStatsd::Naming do
     describe '.dd_job_tags' do
       it 'works' do
         job = double(tag: 'Account.run_reports_later', shard: double(id: 101), strand: 'special')
-        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq({ tag: 'Account.run_reports_later', jobshard: 101})
+        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: 'Account.run_reports_later', jobshard: 101)
       end
 
       it 'properly munges job tags' do
         job = double(tag: 'Quizzes::Quiz#do_something', strand: nil)
-        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq({ tag: 'Quizzes-Quiz.do_something'})
+        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: 'Quizzes-Quiz.do_something')
       end
     end
   end

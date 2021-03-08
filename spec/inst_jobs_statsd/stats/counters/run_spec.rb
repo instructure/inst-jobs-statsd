@@ -18,7 +18,7 @@ RSpec.describe InstJobsStatsd::Stats::Counters::Run do
 
     it do
       expect(InstStatsd::Statsd).to receive(:count)
-        .twice.with(array_including(/\.run$/), 1, 1, { short_stat: anything, tags: {} })
+        .twice.with(array_including(/\.run$/), 1, 1, short_stat: anything, tags: {})
       Delayed::Job.all.each do |job|
         Delayed::Worker.lifecycle.run_callbacks(:perform, {}, job) {}
       end

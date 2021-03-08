@@ -82,7 +82,7 @@ module InstJobsStatsd
 
     def self.dd_region_tags
       return {} unless ENV['INST_JOBS_STATSD_NAMESPACE']
-      {namespace: ENV['INST_JOBS_STATSD_NAMESPACE']}
+      { namespace: ENV['INST_JOBS_STATSD_NAMESPACE'] }
     end
 
     private
@@ -91,7 +91,7 @@ module InstJobsStatsd
       obj_tag, method_tag = job.tag.split(/[\.#]/, 2).map do |v|
         InstStatsd::Statsd.escape(v).gsub('::', '-')
       end
-      return method_tag, obj_tag
+      [method_tag, obj_tag]
     end
   end
 end

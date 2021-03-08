@@ -25,7 +25,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .with(array_including(/\.run_depth$/), 1, 1, { short_stat: anything, tags: {} })
+        .with(array_including(/\.run_depth$/), 1, 1, short_stat: anything, tags: {})
       InstJobsStatsd::Stats::Periodic::Run.report_run_depth
     end
   end
@@ -44,9 +44,9 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.run_age_total$/), number_near(0), 1, { short_stat: anything, tags: {} })
+        .ordered.with(array_including(/\.run_age_total$/), number_near(0), 1, short_stat: anything, tags: {})
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.run_age_max$/), number_near(0), 1, { short_stat: anything, tags: {} })
+        .ordered.with(array_including(/\.run_age_max$/), number_near(0), 1, short_stat: anything, tags: {})
       InstJobsStatsd::Stats::Periodic::Run.report_run_age
     end
   end
