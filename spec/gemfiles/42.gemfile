@@ -1,8 +1,0 @@
-source "https://rubygems.org"
-
-gemspec :path=>"../../"
-
-gem "rails", "~> 4.2.11"
-gem "pg", "~> 0.21.0"
-gem "after_transaction_commit", "< 2"
-gem "test_after_commit", "1.1.0"

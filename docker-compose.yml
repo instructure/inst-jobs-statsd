@@ -11,20 +11,15 @@ services:
       RAILS_ENV: test
       TEST_DB_HOST: postgres
       TEST_DB_USERNAME: postgres
-      TEST_REDIS_CONNECTION: redis://redis:6379/
       TEST_ENV_NUMBER: "1"
     links:
       - postgres
-      - redis
       - graphite
 
   postgres:
     image: postgres:9.6
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
-
-  redis:
-    image: redis:2.6
 
   graphite:
     image: hopsoft/graphite-statsd

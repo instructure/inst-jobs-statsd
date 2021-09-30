@@ -6,14 +6,10 @@ rvm:
   - 2.7
 
 gemfile:
-  - spec/gemfiles/51.gemfile
   - spec/gemfiles/60.gemfile
 
 addons:
   postgresql: '9.6'
-
-services:
-  - redis-server
 
 before_install: gem update bundler
 bundler_args: --jobs 3

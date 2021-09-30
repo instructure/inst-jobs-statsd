@@ -85,7 +85,7 @@ be installed. To get started, run the following:
 
 This will install the gem in a docker image with all versions of Ruby installed,
 and install all gem dependencies in the Ruby 2.4 set of gems. It will also
-download and spin up a Redis and a Graphite container for use with specs. Finally, it will
+download and spin up a Graphite container for use with specs. Finally, it will
 run [wwtd](https://github.com/grosser/wwtd), which runs all specs across all
 supported version of Ruby and Rails, bundling gems for each combination along
 the way.
@@ -97,7 +97,7 @@ Individual spec runs can be started like so:
 
 ```bash
 docker-compose run --rm app /bin/bash -l -c \
-  "BUNDLE_GEMFILE=spec/gemfiles/51.gemfile rvm-exec 2.5 bundle exec rspec"
+  "BUNDLE_GEMFILE=spec/gemfiles/60.gemfile rvm-exec 2.6 bundle exec rspec"
 ```
 
 If you'd like to mount your git checkout within the docker container running
