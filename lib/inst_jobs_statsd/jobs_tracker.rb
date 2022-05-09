@@ -9,7 +9,9 @@ module InstJobsStatsd
     end
 
     def initialize(enable_periodic_queries: true)
+      Stats::Counters::Create.enable
       Stats::Counters::Run.enable
+      Stats::Counters::Complete.enable
       ::Delayed::Job.prepend InstJobsStatsd::Ext::Job
 
       if enable_periodic_queries

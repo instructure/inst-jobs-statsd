@@ -9,7 +9,9 @@ require_relative 'inst_jobs_statsd/jobs_tracker'
 require_relative 'inst_jobs_statsd/naming'
 
 require_relative 'inst_jobs_statsd/stats/counters'
+require_relative 'inst_jobs_statsd/stats/counters/create'
 require_relative 'inst_jobs_statsd/stats/counters/run'
+require_relative 'inst_jobs_statsd/stats/counters/complete'
 
 require_relative 'inst_jobs_statsd/stats/periodic'
 require_relative 'inst_jobs_statsd/stats/periodic/failed'
