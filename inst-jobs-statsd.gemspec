@@ -18,10 +18,10 @@ Gem::Specification.new do |s|
   s.files = Dir['{lib}/**/*']
   s.test_files = Dir['spec/**/*']
 
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 2.7'
 
   s.add_dependency 'inst-jobs', '>= 3.1.1', '< 4.0'
-  s.add_dependency 'inst_statsd', '>= 2.1.2', '< 3.0'
+  s.add_dependency 'inst_statsd', '~> 3.0'
 
   s.add_development_dependency 'bump'
   s.add_development_dependency 'bundler'

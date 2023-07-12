@@ -1,7 +1,6 @@
 /coverage/
 /doc/
 /docker-compose.override.yml
-/Gemfile.lock
 /log/
 /pkg/
 /spec/gemfiles/.bundle/
