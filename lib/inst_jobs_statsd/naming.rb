@@ -8,10 +8,6 @@ module InstJobsStatsd
       BASENAME
     end
 
-    def self.configure(strand_filter: nil)
-      @strand_filter = strand_filter
-    end
-
     def self.qualified_names(stat_name, job)
       names = ["#{basename}.#{stat_name}"]
       tagged = tagged_stat(names[0], job)
@@ -36,21 +32,13 @@ module InstJobsStatsd
 
     def self.dd_job_tags(job)
       tags = dd_region_tags
-      return tags unless job
-      tags = custom_tags(job, tags)
-      return tags unless job.tag
+      return tags unless job&.tag
       return tags if job.tag =~ /Class:0x/
 
       method_tag, obj_tag = split_to_tag(job)
       tag = obj_tag
       tag = [obj_tag, method_tag].join('.') if method_tag.present?
       tags[:tag] = tag
-      tags
-    end
-
-    def self.custom_tags(job, tags)
-      tags[:jobshard] = job.shard.id if job.respond_to?(:shard)
-      tags[:strand] = job.strand if job&.strand && @strand_filter&.call(job)
       tags
     end
 
