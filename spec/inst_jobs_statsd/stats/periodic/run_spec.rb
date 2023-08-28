@@ -49,5 +49,21 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
         .ordered.with(array_including(/\.run_age_max$/), number_near(0), 1, short_stat: anything, tags: {})
       InstJobsStatsd::Stats::Periodic::Run.report_run_age
     end
+
+    context 'with no running jobs' do
+      before do
+        Delayed::Job.update_all(locked_at: nil, locked_by: nil)
+      end
+
+      it do
+        expect(InstStatsd::Statsd).to receive(:gauge)
+          .ordered.with(array_including(/\.run_age_total$/), 0, 1, short_stat: anything, tags: {})
+        expect(InstStatsd::Statsd).to receive(:gauge)
+          .ordered.with(array_including(/\.run_age_max$/), 0, 1, short_stat: anything, tags: {})
+        Timecop.freeze(2.minutes.from_now) do
+          InstJobsStatsd::Stats::Periodic::Run.report_run_age
+        end
+      end
+    end
   end
 end

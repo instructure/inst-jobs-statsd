@@ -91,5 +91,21 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
         InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
       end
     end
+
+    context 'with empty queue' do
+      before do
+        Delayed::Job.delete_all
+      end
+
+      it do
+        expect(InstStatsd::Statsd).to receive(:gauge)
+          .ordered.with(array_including(/\.queue_age_total$/), 0, 1, short_stat: anything, tags: {})
+        expect(InstStatsd::Statsd).to receive(:gauge)
+          .ordered.with(array_including(/\.queue_age_max$/), 0, 1, short_stat: anything, tags: {})
+        Timecop.freeze(2.minutes.from_now) do
+          InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
+        end
+      end
+    end
   end
 end

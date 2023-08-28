@@ -35,7 +35,7 @@ module InstJobsStatsd
           jobs_run_at = queued_jobs_scope.limit(10_000).pluck(:run_at)
           age_secs = jobs_run_at.map { |t| Delayed::Job.db_time_now - t }
           Periodic.report_gauge(:queue_age_total, age_secs.sum)
-          Periodic.report_gauge(:queue_age_max, age_secs.max)
+          Periodic.report_gauge(:queue_age_max, age_secs.max || 0)
         end
 
         def self.queued_jobs_scope
