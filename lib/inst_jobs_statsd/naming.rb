@@ -32,6 +32,7 @@ module InstJobsStatsd
 
     def self.dd_job_tags(job)
       tags = dd_region_tags
+      tags[:priority] = job.priority if job&.priority
       return tags unless job&.tag
       return tags if job.tag =~ /Class:0x/
 

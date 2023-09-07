@@ -11,7 +11,7 @@ RSpec.describe 'InstJobsStatsd::Ext::Job' do
       Delayed::Job.first.fail!
 
       expect(InstStatsd::Statsd).to have_received(:count)
-        .with(array_including(/\.failed$/), 1, 1, short_stat: :failed, tags: {})
+        .with(array_including(/\.failed$/), 1, 1, short_stat: :failed, tags: { priority: Delayed::NORMAL_PRIORITY })
     end
   end
 end

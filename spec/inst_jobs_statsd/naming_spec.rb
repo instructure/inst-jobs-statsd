@@ -43,13 +43,20 @@ RSpec.describe InstJobsStatsd::Naming do
 
     describe '.dd_job_tags' do
       it 'works' do
-        job = double(tag: 'Account.run_reports_later')
+        job = double(tag: 'Account.run_reports_later', priority: nil)
         expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: 'Account.run_reports_later')
       end
 
       it 'properly munges job tags' do
-        job = double(tag: 'Quizzes::Quiz#do_something')
+        job = double(tag: 'Quizzes::Quiz#do_something', priority: nil)
         expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: 'Quizzes-Quiz.do_something')
+      end
+
+      context 'when job has a priority' do
+        it 'includes the priority tag' do
+          job = double(tag: 'Account.run_reports_later', priority: Delayed::NORMAL_PRIORITY)
+          expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: 'Account.run_reports_later', priority: Delayed::NORMAL_PRIORITY)
+        end
       end
     end
   end
