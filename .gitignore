@@ -6,7 +6,6 @@
 /spec/gemfiles/.bundle/
 /spec/dummy/log/
 /spec/dummy/tmp/
-/spec/gemfiles/*.gemfile.lock
 /inst-jobs-statsd-*.gem
 /tmp/
 /*.gem

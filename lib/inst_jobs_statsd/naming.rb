@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module InstJobsStatsd
   module Naming
-    BASENAME = 'delayedjob'.freeze
+    BASENAME = "delayedjob"
 
     # The root prefix for all stat names
     # TODO: Make this configurable
@@ -34,11 +36,11 @@ module InstJobsStatsd
       tags = dd_region_tags
       tags[:priority] = job.priority if job&.priority
       return tags unless job&.tag
-      return tags if job.tag =~ /Class:0x/
+      return tags if job.tag.include?("Class:0x")
 
       method_tag, obj_tag = split_to_tag(job)
       tag = obj_tag
-      tag = [obj_tag, method_tag].join('.') if method_tag.present?
+      tag = [obj_tag, method_tag].join(".") if method_tag.present?
       tags[:tag] = tag
       tags
     end
@@ -48,7 +50,7 @@ module InstJobsStatsd
     def self.job_tags(job)
       return unless job
       return unless job.tag
-      return if job.tag =~ /Class:0x/
+      return if job.tag.include?("Class:0x")
 
       method_tag, obj_tag = split_to_tag(job)
       tags = [obj_tag]
@@ -59,26 +61,25 @@ module InstJobsStatsd
     # We are using all existing stat names here because we do not want
     # to break existing dependencies on the non-regioned data
     def self.region_tags(stat_names)
-      return unless ENV['INST_JOBS_STATSD_NAMESPACE']
+      return unless ENV["INST_JOBS_STATSD_NAMESPACE"]
 
       stat_names.map do |name|
         name
-          .split('.')
-          .insert(2, ENV['INST_JOBS_STATSD_NAMESPACE'])
-          .join('.')
+          .split(".")
+          .insert(2, ENV["INST_JOBS_STATSD_NAMESPACE"])
+          .join(".")
       end
     end
 
     def self.dd_region_tags
-      return {} unless ENV['INST_JOBS_STATSD_NAMESPACE']
-      { namespace: ENV['INST_JOBS_STATSD_NAMESPACE'] }
-    end
+      return {} unless ENV["INST_JOBS_STATSD_NAMESPACE"]
 
-    private
+      { namespace: ENV["INST_JOBS_STATSD_NAMESPACE"] }
+    end
 
     def self.split_to_tag(job)
       obj_tag, method_tag = job.tag.split(/[\.#]/, 2).map do |v|
-        InstStatsd::Statsd.escape(v).gsub('::', '-')
+        InstStatsd::Statsd.escape(v).gsub("::", "-")
       end
       [method_tag, obj_tag]
     end

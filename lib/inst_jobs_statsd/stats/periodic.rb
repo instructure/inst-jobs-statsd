@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 module InstJobsStatsd
   module Stats
     module Periodic
       def self.enable_callbacks
-        @instance ||= Callbacks.new
+        @instance ||= Callbacks.new # rubocop:disable Naming/MemoizedInstanceVariableName
       end
 
       def self.add(proc)
         return unless @instance
+
         @instance.add(proc)
       end
 
@@ -72,6 +75,7 @@ module InstJobsStatsd
         # When the required interval of time has passed, execute the given block
         def tick
           return unless Delayed::Job.db_time_now >= @next_run
+
           update_next_run
           yield
         end
@@ -83,7 +87,7 @@ module InstJobsStatsd
         # from the target interval as much as possible
         def update_next_run
           ticks = ((Delayed::Job.db_time_now - @start_time) / @min_interval).floor
-          @next_run = @start_time + (ticks + 1) * @min_interval
+          @next_run = @start_time + ((ticks + 1) * @min_interval)
         end
       end
     end

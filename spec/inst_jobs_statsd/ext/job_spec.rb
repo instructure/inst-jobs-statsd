@@ -1,10 +1,14 @@
-RSpec.describe 'InstJobsStatsd::Ext::Job' do
-  describe 'sends count on job failure' do
+# frozen_string_literal: true
+
+RSpec.describe "InstJobsStatsd::Ext::Job" do
+  describe "sends count on job failure" do
     before do
       InstJobsStatsd::JobsTracker.new
     end
+
     let(:x) { Struct.new(:perform).new(true) }
-    it 'sends a stat' do
+
+    it "sends a stat" do
       allow(InstStatsd::Statsd).to receive(:count)
 
       x.delay.perform

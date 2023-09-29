@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 RSpec.describe InstJobsStatsd::JobsTracker do
-  describe '.track' do
-    it 'calls the block' do
+  describe ".track" do
+    it "calls the block" do
       @done_in_block = false
       expect do
         InstJobsStatsd::JobsTracker.track do
@@ -10,8 +12,8 @@ RSpec.describe InstJobsStatsd::JobsTracker do
     end
   end
 
-  describe '.initialize' do
-    it 'enables everything' do
+  describe ".initialize" do
+    it "enables everything" do
       expect(InstJobsStatsd::Stats::Counters::Create).to receive(:enable)
       expect(InstJobsStatsd::Stats::Counters::Run).to receive(:enable)
       expect(InstJobsStatsd::Stats::Counters::Complete).to receive(:enable)

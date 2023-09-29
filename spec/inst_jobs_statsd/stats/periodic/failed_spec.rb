@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
   before do
     InstJobsStatsd::Stats::Periodic.instance_variable_set(:@instance, nil)
   end
 
-  describe '.enable' do
-    it 'enables all the things' do
+  describe ".enable" do
+    it "enables all the things" do
       expect(InstJobsStatsd::Stats::Periodic::Failed).to receive(:enable_failed_depth)
       InstJobsStatsd::Stats::Periodic::Failed.enable
     end
   end
 
-  describe '.report_failed_depth' do
+  describe ".report_failed_depth" do
     let(:x) { Struct.new(:perform).new(true) }
     let(:now) { Delayed::Job.db_time_now }
 

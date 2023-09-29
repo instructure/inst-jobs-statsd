@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
   before do
     InstJobsStatsd::Stats::Periodic.instance_variable_set(:@instance, nil)
   end
 
-  describe '.enable' do
-    it 'enables all the things' do
+  describe ".enable" do
+    it "enables all the things" do
       expect(InstJobsStatsd::Stats::Periodic::Run).to receive(:enable_run_depth)
       expect(InstJobsStatsd::Stats::Periodic::Run).to receive(:enable_run_age)
       InstJobsStatsd::Stats::Periodic::Run.enable
     end
   end
 
-  describe '.report_run_depth' do
+  describe ".report_run_depth" do
     let(:x) { Struct.new(:perform).new(true) }
     let(:now) { Delayed::Job.db_time_now }
 
@@ -20,7 +22,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
 
       x.delay.perform
       x.delay.perform
-      Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: 'test')
+      Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
     end
 
     it do
@@ -30,7 +32,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
     end
   end
 
-  describe '.report_run_age' do
+  describe ".report_run_age" do
     let(:x) { Struct.new(:perform).new(true) }
     let(:now) { Delayed::Job.db_time_now }
 
@@ -39,7 +41,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
 
       x.delay.perform
       x.delay.perform
-      Delayed::Job.first.update(locked_at: now, locked_by: 'test')
+      Delayed::Job.first.update(locked_at: now, locked_by: "test")
     end
 
     it do
@@ -50,7 +52,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
       InstJobsStatsd::Stats::Periodic::Run.report_run_age
     end
 
-    context 'with no running jobs' do
+    context "with no running jobs" do
       before do
         Delayed::Job.update_all(locked_at: nil, locked_by: nil)
       end

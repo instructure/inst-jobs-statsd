@@ -1,21 +1,23 @@
-if /^2\.7/ =~ RUBY_VERSION && /60\./ =~ ENV['BUNDLE_GEMFILE'] # Limit coverage to one build
-  require 'simplecov'
+# frozen_string_literal: true
+
+if /^2\.7/ =~ RUBY_VERSION && ENV["BUNDLE_GEMFILE"].include?("60.") # Limit coverage to one build
+  require "simplecov"
 
   SimpleCov.start do
-    add_filter 'lib/inst_jobs_statsd/version.rb'
-    add_filter 'spec'
-    track_files 'lib/**/*.rb'
+    add_filter "lib/inst_jobs_statsd/version.rb"
+    add_filter "spec"
+    track_files "lib/**/*.rb"
   end
 end
 
-require 'inst-jobs-statsd'
-require 'delayed/testing'
+require "inst-jobs-statsd"
+require "delayed/testing"
 
-require 'byebug'
-require 'database_cleaner'
-require 'factory_girl'
-require 'pry'
-require 'timecop'
+require "debug"
+require "database_cleaner"
+require "factory_bot"
+require "pry"
+require "timecop"
 
 # No reason to add default sleep time to specs:
 Delayed::Settings.sleep_delay         = 0
@@ -26,9 +28,9 @@ RSpec.configure do |config|
     c.syntax = %i[should expect]
   end
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.before(:suite) do
-    FactoryGirl.find_definitions
+    FactoryBot.find_definitions
   end
 
   config.before(:suite) do
@@ -36,12 +38,12 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before(:each) do |example|
+  config.before do |example|
     DatabaseCleaner.strategy = (example.metadata[:sinatra] ? :truncation : :transaction)
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  config.after do
     DatabaseCleaner.clean
   end
 
@@ -53,9 +55,9 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 end
 
-require_relative 'setup_test_db'
+require_relative "setup_test_db"
 
-Time.zone = 'UTC'
+Time.zone = "UTC" # rubocop:disable Rails/TimeZoneAssignment
 Rails.logger = Logger.new(nil)
 
-require_relative 'matchers'
+require_relative "matchers"

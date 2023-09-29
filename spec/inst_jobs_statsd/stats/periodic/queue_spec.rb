@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
   before do
     InstJobsStatsd::Stats::Periodic.instance_variable_set(:@instance, nil)
   end
 
-  describe '.enable' do
-    it 'enables all the things' do
+  describe ".enable" do
+    it "enables all the things" do
       expect(InstJobsStatsd::Stats::Periodic::Queue).to receive(:enable_queue_depth)
       expect(InstJobsStatsd::Stats::Periodic::Queue).to receive(:enable_queue_age)
       InstJobsStatsd::Stats::Periodic::Queue.enable
     end
   end
 
-  describe '.report_queue_depth' do
+  describe ".report_queue_depth" do
     let(:x) { Struct.new(:perform).new(true) }
     let(:now) { Delayed::Job.db_time_now }
 
@@ -19,7 +21,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       InstJobsStatsd::Stats::Periodic::Queue.enable_queue_depth
 
       x.delay.perform
-      Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: 'test')
+      Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
 
       x.delay.perform
       x.delay(run_at: now + 1.minute).perform
@@ -49,7 +51,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
     end
   end
 
-  describe '.report_queue_age' do
+  describe ".report_queue_age" do
     let(:x) { Struct.new(:perform).new(true) }
     let(:now) { Delayed::Job.db_time_now }
 
@@ -57,7 +59,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       InstJobsStatsd::Stats::Periodic::Queue.enable_queue_age
 
       x.delay.perform
-      Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: 'test')
+      Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
 
       x.delay.perform
       x.delay(run_at: now + 1.minute).perform
@@ -92,7 +94,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       end
     end
 
-    context 'with empty queue' do
+    context "with empty queue" do
       before do
         Delayed::Job.delete_all
       end

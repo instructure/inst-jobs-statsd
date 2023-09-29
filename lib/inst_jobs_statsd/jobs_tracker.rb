@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InstJobsStatsd
   class JobsTracker
     def self.track(enable_periodic_queries: true)
