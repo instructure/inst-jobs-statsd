@@ -66,6 +66,13 @@ RSpec.describe InstJobsStatsd::Naming do
                                                                 priority: Delayed::NORMAL_PRIORITY)
         end
       end
+
+      it "includes the cluster tag if the job has a shard" do
+        job = double(tag: "Account.run_reports_later",
+                     priority: nil,
+                     current_shard: double(database_server: double(id: "cluster6")))
+        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: "Account.run_reports_later", cluster: "cluster6")
+      end
     end
   end
 end

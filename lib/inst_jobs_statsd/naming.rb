@@ -34,8 +34,13 @@ module InstJobsStatsd
 
     def self.dd_job_tags(job)
       tags = dd_region_tags
-      tags[:priority] = job.priority if job&.priority
-      return tags unless job&.tag
+      return tags unless job
+
+      tags[:cluster] = job.current_shard&.database_server&.id if job.respond_to?(:current_shard)
+      tags[:priority] = job.priority
+      tags.compact!
+
+      return tags unless job.tag
       return tags if job.tag.include?("Class:0x")
 
       method_tag, obj_tag = split_to_tag(job)
