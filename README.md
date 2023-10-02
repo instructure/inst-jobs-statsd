@@ -84,7 +84,7 @@ be installed. To get started, run the following:
 ```
 
 This will install the gem in a docker image with all versions of Ruby installed,
-and install all gem dependencies in the Ruby 2.4 set of gems. It will also
+and install all gem dependencies in the Ruby 2.7 set of gems. It will also
 download and spin up a Graphite container for use with specs. Finally, it will
 run [wwtd](https://github.com/grosser/wwtd), which runs all specs across all
 supported version of Ruby and Rails, bundling gems for each combination along
