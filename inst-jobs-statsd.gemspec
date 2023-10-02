@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency "inst-jobs", ">= 3.1.1", "< 4.0"
   s.add_dependency "inst_statsd", "~> 3.0"
 
-  s.add_development_dependency "bump"
   s.add_development_dependency "bundler"
   s.add_development_dependency "database_cleaner", "~> 2.0"
   s.add_development_dependency "debug"
