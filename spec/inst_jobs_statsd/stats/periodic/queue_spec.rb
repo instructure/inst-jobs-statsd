@@ -68,17 +68,17 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.queue_age_total$/), number_near(0), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.queue_age_total$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.queue_age_max$/), number_near(0), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.queue_age_max$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
       InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
     end
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.queue_age_total$/), number_near(180), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.queue_age_total$/), be_within(0.5).of(180), 1, short_stat: anything, tags: {})
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.queue_age_max$/), number_near(120), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.queue_age_max$/), be_within(0.5).of(120), 1, short_stat: anything, tags: {})
       Timecop.freeze(2.minutes.from_now) do
         InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
       end
@@ -86,9 +86,9 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.queue_age_total$/), number_near(2940), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.queue_age_total$/), be_within(0.5).of(2940), 1, short_stat: anything, tags: {})
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.queue_age_max$/), number_near(1200), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.queue_age_max$/), be_within(0.5).of(1200), 1, short_stat: anything, tags: {})
       Timecop.freeze(20.minutes.from_now) do
         InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
       end

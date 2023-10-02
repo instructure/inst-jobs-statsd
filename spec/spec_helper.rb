@@ -59,5 +59,3 @@ require_relative "setup_test_db"
 
 Time.zone = "UTC" # rubocop:disable Rails/TimeZoneAssignment
 Rails.logger = Logger.new(nil)
-
-require_relative "matchers"
