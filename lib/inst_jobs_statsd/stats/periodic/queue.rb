@@ -20,10 +20,7 @@ module InstJobsStatsd
         end
 
         def self.report_queue_depth
-          # count = Delayed::Job.jobs_count(:current)  <-- includes running / locked
-          scope = queued_jobs_scope
-          count = scope.count
-          Periodic.report_gauge(:queue_depth, count)
+          Periodic.report_gauge_by_queue(:queue_depth, queued_jobs_scope.count)
         end
 
         # Limit the jobs included in this gauge to prevent blowing up
@@ -34,16 +31,20 @@ module InstJobsStatsd
         # the count is capped, the metric will continue to grow
         # if the queue is actually stalled
         def self.report_queue_age
-          jobs_run_at = queued_jobs_scope.limit(10_000).pluck(:run_at)
-          age_secs = jobs_run_at.map { |t| Delayed::Job.db_time_now - t }
-          Periodic.report_gauge(:queue_age_total, age_secs.sum)
-          Periodic.report_gauge(:queue_age_max, age_secs.max || 0)
+          jobs_run_at_by_queue = queued_jobs_scope.limit(10_000).pluck(:queue, "ARRAY_AGG(run_at)").to_h
+          age_secs_by_queue = jobs_run_at_by_queue.transform_values { |v| v.map { |t| Delayed::Job.db_time_now - t } }
+          age_max_by_queue = age_secs_by_queue.transform_values(&:max)
+          age_total_by_queue = age_secs_by_queue.transform_values(&:sum)
+
+          Periodic.report_gauge_by_queue(:queue_age_total, age_total_by_queue)
+          Periodic.report_gauge_by_queue(:queue_age_max, age_max_by_queue)
         end
 
         def self.queued_jobs_scope
           Delayed::Job
             .current
             .where("locked_at IS NULL OR locked_by = 'on_hold'") # not running
+            .group(:queue)
         end
       end
     end

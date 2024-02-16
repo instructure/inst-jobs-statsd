@@ -23,11 +23,18 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
       x.delay.perform
       x.delay.perform
       Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
+      x.delay(queue: "queue2").perform
+      x.delay(queue: "queue2").perform
+      Delayed::Job.last.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
     end
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .with(array_including(/\.run_depth$/), 1, 1, short_stat: anything, tags: {})
+        .with(array_including(/\.run_depth\.total$/), 2, 1, short_stat: anything, tags: {})
+      expect(InstStatsd::Statsd).to receive(:gauge)
+        .with(array_including(/\.run_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue" })
+      expect(InstStatsd::Statsd).to receive(:gauge)
+        .with(array_including(/\.run_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue2" })
       InstJobsStatsd::Stats::Periodic::Run.report_run_depth
     end
   end
@@ -46,9 +53,13 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.run_age_total$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.run_age_total$/), be_within(0.5).of(0), 1, short_stat: anything, tags: { queue: "queue" })
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .ordered.with(array_including(/\.run_age_max$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
+        .ordered.with(array_including(/\.run_age_total\.total$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
+      expect(InstStatsd::Statsd).to receive(:gauge)
+        .ordered.with(array_including(/\.run_age_max$/), be_within(0.5).of(0), 1, short_stat: anything, tags: { queue: "queue" })
+      expect(InstStatsd::Statsd).to receive(:gauge)
+        .ordered.with(array_including(/\.run_age_max\.total$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
       InstJobsStatsd::Stats::Periodic::Run.report_run_age
     end
 
@@ -59,9 +70,9 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Run do
 
       it do
         expect(InstStatsd::Statsd).to receive(:gauge)
-          .ordered.with(array_including(/\.run_age_total$/), 0, 1, short_stat: anything, tags: {})
+          .ordered.with(array_including(/\.run_age_total\.total$/), 0, 1, short_stat: anything, tags: {})
         expect(InstStatsd::Statsd).to receive(:gauge)
-          .ordered.with(array_including(/\.run_age_max$/), 0, 1, short_stat: anything, tags: {})
+          .ordered.with(array_including(/\.run_age_max\.total$/), 0, 1, short_stat: anything, tags: {})
         Timecop.freeze(2.minutes.from_now) do
           InstJobsStatsd::Stats::Periodic::Run.report_run_age
         end

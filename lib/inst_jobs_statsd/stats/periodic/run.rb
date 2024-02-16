@@ -20,19 +20,21 @@ module InstJobsStatsd
         end
 
         def self.report_run_depth
-          scope = running_jobs_scope
-          Periodic.report_gauge(:run_depth, scope.count)
+          Periodic.report_gauge_by_queue(:run_depth, running_jobs_scope.count)
         end
 
         def self.report_run_age
-          jobs_run_at = running_jobs_scope.limit(10_000).pluck(:run_at)
-          age_secs = jobs_run_at.map { |t| Delayed::Job.db_time_now - t }
-          Periodic.report_gauge(:run_age_total, age_secs.sum)
-          Periodic.report_gauge(:run_age_max, age_secs.max || 0)
+          jobs_run_at_by_queue = running_jobs_scope.limit(10_000).pluck(:queue, "ARRAY_AGG(run_at)").to_h
+          age_secs_by_queue = jobs_run_at_by_queue.transform_values { |v| v.map { |t| Delayed::Job.db_time_now - t } }
+          age_max_by_queue = age_secs_by_queue.transform_values(&:max)
+          age_total_by_queue = age_secs_by_queue.transform_values(&:sum)
+
+          Periodic.report_gauge_by_queue(:run_age_total, age_total_by_queue)
+          Periodic.report_gauge_by_queue(:run_age_max, age_max_by_queue)
         end
 
         def self.running_jobs_scope
-          Delayed::Job.running
+          Delayed::Job.running.group(:queue)
         end
       end
     end

@@ -3,6 +3,7 @@ version: '2'
 services:
   app:
     build: .
+    platform: linux/amd64
     environment:
       INST_STATSD_HOST: graphite
       INST_STATSD_PORT: "8125"

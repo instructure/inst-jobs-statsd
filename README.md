@@ -20,13 +20,20 @@ Implements the following stats:
   - `delayedjob.failed_after`: time to failure (timing)
 
 - periodic gauges -- roughly every 60s:
-  - `delayedjob.run_depth`: # of running jobs
-  - `delayedjob.run_age_max`: age in seconds of oldest running jobs
-  - `delayedjob.run_age_total`: total age in seconds of running jobs
-  - `delayedjob.queue_depth`: # of pending jobs, ready to run
-  - `delayedjob.queue_age_max`: age in seconds of oldest job in the queue
-  - `delayedjob.queue_age_total`: total age in seconds of jobs in the queue
-  - `delayedjob.failed_depth`: # of jobs in the failed_jobs table
+  - `delayedjob.run_depth`: # of running jobs by queue
+  - `delayedjob.run_depth.total`: # of running jobs
+  - `delayedjob.run_age_max`: age in seconds of oldest running jobs by queue
+  - `delayedjob.run_age_max.total`: age in seconds of oldest running jobs
+  - `delayedjob.run_age_total`: total age in seconds of running jobs by queue
+  - `delayedjob.run_age_total.total`: total age in seconds of running jobs
+  - `delayedjob.queue_depth`: # of pending jobs, ready to run by queue
+  - `delayedjob.queue_depth.total`: # of pending jobs, ready to run
+  - `delayedjob.queue_age_max`: age in seconds of oldest job in the queue by queue
+  - `delayedjob.queue_age_max.total`: age in seconds of oldest job in the queue
+  - `delayedjob.queue_age_total`: total age in seconds of jobs in the queue by queue
+  - `delayedjob.queue_age_total.total`: total age in seconds of jobs in the queue
+  - `delayedjob.failed_depth`: # of jobs in the failed_jobs table by queue
+  - `delayedjob.failed_depth.total`: # of jobs in the failed_jobs table
 
 - other
   - `delayedjob.pop`: time for each :pop callback (timing)

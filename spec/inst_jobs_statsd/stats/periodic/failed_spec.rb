@@ -22,11 +22,18 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
 
       x.delay.perform
       Delayed::Job.first.fail!
+
+      x.delay(queue: "queue2").perform
+      Delayed::Job.last.fail!
     end
 
     it do
       expect(InstStatsd::Statsd).to receive(:gauge)
-        .with(array_including(/\.failed_depth$/), 1, 1, short_stat: anything, tags: {})
+        .with(array_including(/\.failed_depth\.total$/), 2, 1, short_stat: anything, tags: {})
+      expect(InstStatsd::Statsd).to receive(:gauge)
+        .with(array_including(/\.failed_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue" })
+      expect(InstStatsd::Statsd).to receive(:gauge)
+        .with(array_including(/\.failed_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue2" })
       InstJobsStatsd::Stats::Periodic::Failed.report_failed_depth
     end
   end

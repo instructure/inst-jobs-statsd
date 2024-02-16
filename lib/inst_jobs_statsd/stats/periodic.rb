@@ -13,9 +13,21 @@ module InstJobsStatsd
         @instance.add(proc)
       end
 
-      def self.report_gauge(stat, value, job: nil, sample_rate: 1)
+      def self.report_gauge(stat, value, job: nil, sample_rate: 1, additional_tags: {})
         stats = Naming.qualified_names(stat, job)
-        InstStatsd::Statsd.gauge(stats, value, sample_rate, short_stat: stat, tags: Naming.dd_job_tags(job))
+        InstStatsd::Statsd.gauge(stats,
+                                 value,
+                                 sample_rate,
+                                 short_stat: stat,
+                                 tags: Naming.dd_job_tags(job).merge(additional_tags))
+      end
+
+      def self.report_gauge_by_queue(stat, value_by_queue)
+        value_by_queue.each do |queue, count|
+          report_gauge(stat, count, additional_tags: { queue: queue })
+        end
+
+        report_gauge("#{stat}.total", value_by_queue.values.sum)
       end
 
       class Callbacks

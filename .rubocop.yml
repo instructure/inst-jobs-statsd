@@ -15,6 +15,10 @@ Naming/FileName:
   Exclude:
    - lib/inst-jobs-statsd.rb
 
+Layout/LineLength:
+  Exclude:
+    - 'spec/**/*'
+
 Rails/SkipsModelValidations:
   Enabled: false
 

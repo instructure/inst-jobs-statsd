@@ -14,8 +14,9 @@ module InstJobsStatsd
         end
 
         def self.report_failed_depth
-          count = Delayed::Job::Failed.count
-          Periodic.report_gauge(:failed_depth, count)
+          count_by_queue = Delayed::Job::Failed.group(:queue).count
+
+          Periodic.report_gauge_by_queue(:failed_depth, count_by_queue)
         end
       end
     end
