@@ -43,7 +43,7 @@ module InstJobsStatsd
         def self.queued_jobs_scope
           Delayed::Job
             .current
-            .where("locked_at IS NULL OR locked_by = 'on_hold'") # not running
+            .where("locked_at IS NULL OR locked_by = ?", Delayed::Backend::Base::ON_HOLD_LOCKED_BY) # not running
             .group(:queue)
         end
       end
