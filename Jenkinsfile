@@ -28,7 +28,6 @@ pipeline {
             post {
                 always {
                     sh 'docker cp coverage:/app/coverage .'
-                    sh 'docker-compose down --rmi=all --volumes --remove-orphans'
 
                     publishHTML target: [
                       allowMissing: false,
@@ -40,6 +39,26 @@ pipeline {
                     ]
                 }
             }
+        }
+
+        stage('Publish') {
+            when {
+                allOf {
+                expression { GERRIT_BRANCH == "main" }
+                environment name: "GERRIT_EVENT_TYPE", value: "change-merged"
+                }
+            }
+            steps {
+                withCredentials([string(credentialsId: 'rubygems-rw', variable: 'GEM_HOST_API_KEY')]) {
+                    sh 'docker run -e GEM_HOST_API_KEY --rm inst-jobs-statsd_app /bin/bash -lc "./bin/publish.sh"'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker-compose down --rmi=all --volumes --remove-orphans'
         }
     }
 }
