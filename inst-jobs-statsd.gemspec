@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.7"
 
   s.add_dependency "inst-jobs", ">= 3.1.1", "< 4.0"
-  s.add_dependency "inst_statsd", "~> 3.0"
+  s.add_dependency "inst_statsd", "~> 3.1"
 
   s.add_development_dependency "bundler"
   s.add_development_dependency "database_cleaner", "~> 2.0"
