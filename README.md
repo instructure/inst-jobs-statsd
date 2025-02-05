@@ -13,7 +13,8 @@ Implements the following stats:
 - for each job:
   - `delayedjob.queue`: time spent in queue, prior to starting (timing)
   - `delayedjob.perform`: time to execute (timing)
-  - `delayedjob.run`: simple counter of executed jobs
+  - `delayedjob.run`: simple counter of executed jobs (incremented in the job's `before` lifecycle hook)
+  - `delayedjob.complete`: Simple counter of completed jobs (incremented in the job's `after` lifecycle hook)
 
 - for failed jobs:
   - `delayedjob.failed`: sent for each job failure (count)
