@@ -8,16 +8,16 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Perform do
 
   describe ".enable" do
     it "enables all the things" do
-      expect(InstJobsStatsd::Stats::Timing::Perform).to receive(:enable_batching)
-      expect(InstJobsStatsd::Stats::Timing::Perform).to receive(:enable_perform_timing)
-      InstJobsStatsd::Stats::Timing::Perform.enable
+      expect(described_class).to receive(:enable_batching)
+      expect(described_class).to receive(:enable_perform_timing)
+      described_class.enable
     end
   end
 
   describe ".enable_batching" do
     it "does batching" do
       expect(InstStatsd::Statsd).to receive(:batch).and_call_original
-      InstJobsStatsd::Stats::Timing::Perform.enable_batching
+      described_class.enable_batching
       Delayed::Worker.lifecycle.run_callbacks(:perform, worker, job) { @in_block = true }
       expect(@in_block).to be_truthy
     end
@@ -29,7 +29,7 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Perform do
         .once.ordered.with(array_including(/\.queue$/), any_args)
       expect(InstStatsd::Statsd).to receive(:timing)
         .once.ordered.with(array_including(/\.perform$/), any_args)
-      InstJobsStatsd::Stats::Timing::Perform.enable_perform_timing
+      described_class.enable_perform_timing
       Delayed::Worker.lifecycle.run_callbacks(:perform, worker, job) { @in_block = true }
       expect(@in_block).to be_truthy
     end

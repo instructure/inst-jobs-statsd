@@ -3,41 +3,41 @@
 RSpec.describe InstJobsStatsd::Stats::Periodic do
   before do
     Delayed::Worker.lifecycle.reset!
-    InstJobsStatsd::Stats::Periodic.instance_variable_set(:@instance, nil)
+    described_class.instance_variable_set(:@instance, nil)
   end
 
   describe ".enable_callbacks" do
     it "only happens once" do
       expect(InstJobsStatsd::Stats::Periodic::Callbacks).to receive(:new).once.and_call_original
-      2.times { InstJobsStatsd::Stats::Periodic.enable_callbacks }
+      2.times { described_class.enable_callbacks }
     end
   end
 
   describe ".add" do
     it "does nothing if not enabled" do
       expect_any_instance_of(InstJobsStatsd::Stats::Periodic::Callbacks).not_to receive(:add)
-      InstJobsStatsd::Stats::Periodic.add(-> {})
+      described_class.add(-> {})
     end
 
     it "does something if enabled" do
       expect_any_instance_of(InstJobsStatsd::Stats::Periodic::Callbacks)
         .to receive(:add).and_call_original
-      InstJobsStatsd::Stats::Periodic.enable_callbacks
-      InstJobsStatsd::Stats::Periodic.add(-> {})
+      described_class.enable_callbacks
+      described_class.add(-> {})
     end
   end
 
   describe "Callbacks" do
     before do
-      InstJobsStatsd::Stats::Periodic.instance_variable_set(:@instance, nil)
+      described_class.instance_variable_set(:@instance, nil)
     end
 
     it "calls the procs at the interval" do
-      InstJobsStatsd::Stats::Periodic.enable_callbacks
+      described_class.enable_callbacks
 
       @count = 0
-      InstJobsStatsd::Stats::Periodic.add(-> { @count += 1 })
-      InstJobsStatsd::Stats::Periodic.add(-> { @count += 2 })
+      described_class.add(-> { @count += 1 })
+      described_class.add(-> { @count += 2 })
 
       Timecop.freeze(Delayed::Job.db_time_now + 60.seconds) do
         Delayed::Worker.lifecycle.run_callbacks(:work_queue_pop, nil, nil) { nil }

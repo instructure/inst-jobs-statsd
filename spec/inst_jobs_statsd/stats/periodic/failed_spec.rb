@@ -7,8 +7,8 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
 
   describe ".enable" do
     it "enables all the things" do
-      expect(InstJobsStatsd::Stats::Periodic::Failed).to receive(:enable_failed_depth)
-      InstJobsStatsd::Stats::Periodic::Failed.enable
+      expect(described_class).to receive(:enable_failed_depth)
+      described_class.enable
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
 
     before do
       InstJobsStatsd::Stats::Periodic.enable_callbacks
-      InstJobsStatsd::Stats::Periodic::Failed.enable_failed_depth
+      described_class.enable_failed_depth
 
       x.delay.perform
       Delayed::Job.first.fail!
@@ -34,7 +34,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Failed do
         .with(array_including(/\.failed_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue" })
       expect(InstStatsd::Statsd).to receive(:gauge)
         .with(array_including(/\.failed_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue2" })
-      InstJobsStatsd::Stats::Periodic::Failed.report_failed_depth
+      described_class.report_failed_depth
     end
   end
 end

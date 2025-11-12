@@ -8,9 +8,9 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Pop do
 
   describe ".enable" do
     it "enables all the things" do
-      expect(InstJobsStatsd::Stats::Timing::Pop).to receive(:enable_pop_timing)
-      expect(InstJobsStatsd::Stats::Timing::Pop).to receive(:enable_workqueue_pop_timing)
-      InstJobsStatsd::Stats::Timing::Pop.enable
+      expect(described_class).to receive(:enable_pop_timing)
+      expect(described_class).to receive(:enable_workqueue_pop_timing)
+      described_class.enable
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Pop do
     it "reports pop time" do
       expect(InstStatsd::Statsd).to receive(:timing)
         .once.ordered.with(array_including(/\.pop$/), any_args)
-      InstJobsStatsd::Stats::Timing::Pop.enable_pop_timing
+      described_class.enable_pop_timing
       Delayed::Worker.lifecycle.run_callbacks(:pop, worker) { @in_block = true }
       expect(@in_block).to be_truthy
     end
@@ -28,7 +28,7 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Pop do
     it "reports pop time" do
       expect(InstStatsd::Statsd).to receive(:timing)
         .once.ordered.with(array_including(/\.workqueuepop$/), any_args)
-      InstJobsStatsd::Stats::Timing::Pop.enable_workqueue_pop_timing
+      described_class.enable_workqueue_pop_timing
       Delayed::Worker.lifecycle.run_callbacks(:work_queue_pop, worker, {}) { @in_block = true }
       expect(@in_block).to be_truthy
     end

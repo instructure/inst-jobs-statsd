@@ -8,8 +8,8 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Failed do
 
   describe ".enable" do
     it "enables all the things" do
-      expect(InstJobsStatsd::Stats::Timing::Failed).to receive(:enable_failure_timing)
-      InstJobsStatsd::Stats::Timing::Failed.enable
+      expect(described_class).to receive(:enable_failure_timing)
+      described_class.enable
     end
   end
 
@@ -17,7 +17,7 @@ RSpec.describe InstJobsStatsd::Stats::Timing::Failed do
     it "reports failure time" do
       expect(InstStatsd::Statsd).to receive(:timing)
         .once.with(array_including(/\.failed_after$/), any_args)
-      InstJobsStatsd::Stats::Timing::Failed.enable_failure_timing
+      described_class.enable_failure_timing
       Delayed::Worker.lifecycle.run_callbacks(
         :error, worker, job, Exception.new("test")
       ) { @in_block = true }

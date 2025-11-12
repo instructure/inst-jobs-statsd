@@ -7,9 +7,9 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
 
   describe ".enable" do
     it "enables all the things" do
-      expect(InstJobsStatsd::Stats::Periodic::Queue).to receive(:enable_queue_depth)
-      expect(InstJobsStatsd::Stats::Periodic::Queue).to receive(:enable_queue_age)
-      InstJobsStatsd::Stats::Periodic::Queue.enable
+      expect(described_class).to receive(:enable_queue_depth)
+      expect(described_class).to receive(:enable_queue_age)
+      described_class.enable
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
     let(:now) { Delayed::Job.db_time_now }
 
     before do
-      InstJobsStatsd::Stats::Periodic::Queue.enable_queue_depth
+      described_class.enable_queue_depth
 
       x.delay.perform
       Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
@@ -33,7 +33,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
         .with(array_including(/\.queue_depth$/), 1, 1, short_stat: anything, tags: { queue: "queue" })
       expect(InstStatsd::Statsd).to receive(:gauge)
         .with(array_including(/\.queue_depth\.total$/), 1, 1, short_stat: anything, tags: {})
-      InstJobsStatsd::Stats::Periodic::Queue.report_queue_depth
+      described_class.report_queue_depth
     end
 
     it do
@@ -42,7 +42,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       expect(InstStatsd::Statsd).to receive(:gauge)
         .with(array_including(/\.queue_depth\.total$/), 2, 1, short_stat: anything, tags: {})
       Timecop.freeze(2.minutes.from_now) do
-        InstJobsStatsd::Stats::Periodic::Queue.report_queue_depth
+        described_class.report_queue_depth
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       expect(InstStatsd::Statsd).to receive(:gauge)
         .with(array_including(/\.queue_depth\.total$/), 3, 1, short_stat: anything, tags: {})
       Timecop.freeze(20.minutes.from_now) do
-        InstJobsStatsd::Stats::Periodic::Queue.report_queue_depth
+        described_class.report_queue_depth
       end
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
     let(:now) { Delayed::Job.db_time_now }
 
     before do
-      InstJobsStatsd::Stats::Periodic::Queue.enable_queue_age
+      described_class.enable_queue_age
 
       x.delay.perform
       Delayed::Job.first.update(locked_at: Delayed::Job.db_time_now, locked_by: "test")
@@ -81,7 +81,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
         .ordered.with(array_including(/\.queue_age_max$/), be_within(0.5).of(0), 1, short_stat: anything, tags: { queue: "queue" })
       expect(InstStatsd::Statsd).to receive(:gauge)
         .ordered.with(array_including(/\.queue_age_max\.total$/), be_within(0.5).of(0), 1, short_stat: anything, tags: {})
-      InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
+      described_class.report_queue_age
     end
 
     it do
@@ -94,7 +94,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       expect(InstStatsd::Statsd).to receive(:gauge)
         .ordered.with(array_including(/\.queue_age_max\.total$/), be_within(0.5).of(120), 1, short_stat: anything, tags: {})
       Timecop.freeze(2.minutes.from_now) do
-        InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
+        described_class.report_queue_age
       end
     end
 
@@ -108,7 +108,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
       expect(InstStatsd::Statsd).to receive(:gauge)
         .ordered.with(array_including(/\.queue_age_max\.total$/), be_within(0.5).of(1200), 1, short_stat: anything, tags: {})
       Timecop.freeze(20.minutes.from_now) do
-        InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
+        described_class.report_queue_age
       end
     end
 
@@ -123,7 +123,7 @@ RSpec.describe InstJobsStatsd::Stats::Periodic::Queue do
         expect(InstStatsd::Statsd).to receive(:gauge)
           .ordered.with(array_including(/\.queue_age_max\.total$/), 0, 1, short_stat: anything, tags: {})
         Timecop.freeze(2.minutes.from_now) do
-          InstJobsStatsd::Stats::Periodic::Queue.report_queue_age
+          described_class.report_queue_age
         end
       end
     end

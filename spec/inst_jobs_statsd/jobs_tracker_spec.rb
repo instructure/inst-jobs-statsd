@@ -5,7 +5,7 @@ RSpec.describe InstJobsStatsd::JobsTracker do
     it "calls the block" do
       @done_in_block = false
       expect do
-        InstJobsStatsd::JobsTracker.track do
+        described_class.track do
           @done_in_block = true
         end
       end.to(change { @done_in_block })
@@ -26,7 +26,7 @@ RSpec.describe InstJobsStatsd::JobsTracker do
       expect(InstJobsStatsd::Stats::Timing::Perform).to receive(:enable)
       expect(InstJobsStatsd::Stats::Timing::Pop).to receive(:enable)
 
-      InstJobsStatsd::JobsTracker.new
+      described_class.new
     end
   end
 end

@@ -3,8 +3,8 @@
 RSpec.describe InstJobsStatsd::Stats::Counters::Run do
   describe ".enable" do
     it "enables all the things" do
-      expect(InstJobsStatsd::Stats::Counters::Run).to receive(:enable_run_count)
-      InstJobsStatsd::Stats::Counters::Run.enable
+      expect(described_class).to receive(:enable_run_count)
+      described_class.enable
     end
   end
 
@@ -13,7 +13,7 @@ RSpec.describe InstJobsStatsd::Stats::Counters::Run do
 
     before do
       Delayed::Worker.lifecycle.reset!
-      InstJobsStatsd::Stats::Counters::Run.enable
+      described_class.enable
 
       2.times { x.delay.perform }
     end

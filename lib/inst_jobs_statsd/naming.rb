@@ -83,7 +83,7 @@ module InstJobsStatsd
     end
 
     def self.split_to_tag(job)
-      obj_tag, method_tag = job.tag.split(/[\.#]/, 2).map do |v|
+      obj_tag, method_tag = job.tag.split(/[.#]/, 2).map do |v|
         InstStatsd::Statsd.escape(v).gsub("::", "-")
       end
       [method_tag, obj_tag]

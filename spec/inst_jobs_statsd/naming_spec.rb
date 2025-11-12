@@ -2,7 +2,7 @@
 
 RSpec.describe InstJobsStatsd::Naming do
   describe ".qualified_names" do
-    subject { InstJobsStatsd::Naming.qualified_names(stat_name, job) }
+    subject { described_class.qualified_names(stat_name, job) }
 
     let(:stat_name) { :wut }
 
@@ -49,21 +49,21 @@ RSpec.describe InstJobsStatsd::Naming do
     end
 
     describe ".dd_job_tags" do
-      it "works" do
+      it "returns the tag hash for the given job" do
         job = double(tag: "Account.run_reports_later", priority: nil)
-        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: "Account.run_reports_later")
+        expect(described_class.dd_job_tags(job)).to eq(tag: "Account.run_reports_later")
       end
 
       it "properly munges job tags" do
         job = double(tag: "Quizzes::Quiz#do_something", priority: nil)
-        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: "Quizzes-Quiz.do_something")
+        expect(described_class.dd_job_tags(job)).to eq(tag: "Quizzes-Quiz.do_something")
       end
 
       context "when job has a priority" do
         it "includes the priority tag" do
           job = double(tag: "Account.run_reports_later", priority: Delayed::NORMAL_PRIORITY)
-          expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: "Account.run_reports_later",
-                                                                priority: Delayed::NORMAL_PRIORITY)
+          expect(described_class.dd_job_tags(job)).to eq(tag: "Account.run_reports_later",
+                                                         priority: Delayed::NORMAL_PRIORITY)
         end
       end
 
@@ -71,7 +71,7 @@ RSpec.describe InstJobsStatsd::Naming do
         job = double(tag: "Account.run_reports_later",
                      priority: nil,
                      current_shard: double(database_server: double(id: "cluster6")))
-        expect(InstJobsStatsd::Naming.dd_job_tags(job)).to eq(tag: "Account.run_reports_later", cluster: "cluster6")
+        expect(described_class.dd_job_tags(job)).to eq(tag: "Account.run_reports_later", cluster: "cluster6")
       end
     end
   end

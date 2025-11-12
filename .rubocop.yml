@@ -1,16 +1,19 @@
 inherit_gem:
   rubocop-inst:
-  - rubocop.yml
-  - rubocop-rspec.yml
+    - rubocop.yml
 
 require:
- - rubocop-factory_bot
- - rubocop-rake
- - rubocop-rails
+  - rubocop-rspec
+
+plugins:
+  - rubocop-rails
+  - rubocop-factory_bot
 
 AllCops:
   TargetRubyVersion: 2.7
-
+  SuggestExtensions: false
+  Exclude:
+   - inst-jobs_statsd.gemspec
 Naming/FileName:
   Exclude:
    - lib/inst-jobs-statsd.rb
@@ -32,4 +35,17 @@ RSpec/VerifiedDoubles:
 Style/Documentation:
   Enabled: false
 Style/FetchEnvVar:
+  Enabled: false
+#Ignore some cops that are not relevant for the upgrade but should be looked at
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/NestedGroups:
+  Enabled: false
+RSpec/MessageSpies:
+  Enabled: false
+Capybara/RSpec/PredicateMatcher:
   Enabled: false
