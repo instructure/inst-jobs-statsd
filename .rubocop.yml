@@ -10,7 +10,7 @@ plugins:
   - rubocop-factory_bot
 
 AllCops:
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.2.0
   SuggestExtensions: false
   Exclude:
    - inst-jobs_statsd.gemspec
@@ -47,5 +47,7 @@ RSpec/NestedGroups:
   Enabled: false
 RSpec/MessageSpies:
   Enabled: false
+
+# Explicitly disable the problematic Capybara cop causing crashes
 Capybara/RSpec/PredicateMatcher:
   Enabled: false

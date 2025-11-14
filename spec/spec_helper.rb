@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if /^2\.7/ =~ RUBY_VERSION && ENV["BUNDLE_GEMFILE"].include?("60.") # Limit coverage to one build
+if /^3\.2/ =~ RUBY_VERSION && ENV["BUNDLE_GEMFILE"].include?("60.") # Limit coverage to one build
   require "simplecov"
 
   SimpleCov.start do

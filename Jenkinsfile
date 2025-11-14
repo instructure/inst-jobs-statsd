@@ -21,7 +21,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'docker-compose run --rm app /bin/bash -lc "rvm-exec 2.7 bin/rubocop"'
+                sh 'docker-compose run --rm app /bin/bash -lc "rvm-exec 3.2.0 bin/rubocop"'
                 sh 'docker-compose run --name coverage app'
             }
 

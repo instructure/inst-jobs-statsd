@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{lib}/**/*"]
 
-  s.required_ruby_version = ">= 2.7"
+  s.required_ruby_version = ">= 3.2.0"
 
   s.add_dependency "inst-jobs", ">= 3.1.1", "< 4.0"
   s.add_dependency "inst_statsd", "~> 3.1"

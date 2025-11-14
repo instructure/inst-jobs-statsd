@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 
 rvm:
-  - 2.7
+  - 3.2.0
 
 gemfile:
   - spec/gemfiles/60.gemfile
