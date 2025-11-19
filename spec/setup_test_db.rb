@@ -38,7 +38,17 @@ ActiveRecord::Base.establish_connection(connection_config)
 
 # Apply the migrations from the inst-jobs gem
 inst_jobs_spec = Gem::Specification.find_by_name("inst-jobs")
-if Rails.version >= "6"
+if Rails.version >= "7"
+  migrations_path = "#{inst_jobs_spec.gem_dir}/db/migrate"
+  context = ActiveRecord::MigrationContext.new(migrations_path)
+  context.migrate
+
+  spec_migrations_path = "#{inst_jobs_spec.gem_dir}/spec/migrate"
+  if Dir.exist?(spec_migrations_path)
+    spec_context = ActiveRecord::MigrationContext.new(spec_migrations_path)
+    spec_context.migrate
+  end
+elsif Rails.version >= "6"
   sm = ActiveRecord::Base.connection.schema_migration
   migrations = ActiveRecord::MigrationContext.new("#{inst_jobs_spec.gem_dir}/db/migrate", sm).migrations
   ActiveRecord::Migrator.new(:up, migrations, sm).migrate
